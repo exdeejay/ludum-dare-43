@@ -8,9 +8,11 @@ export var gravity = 980
 var velocity = Vector2()
 var acceleration = Vector2()
 
+const bullet = preload("res://Scenes/Bullet.tscn")
+
+onready var camera = get_node("/root/Main/Camera2D")
 onready var gun_anchor = $GunAnchor
 onready var gun = $GunAnchor/Gun
-var bullet = preload("res://Scenes/Bullet.tscn")
 onready var bullet_spawn = $GunAnchor/Gun/BulletSpawn
 onready var bullet_container = $"/root/Main/Bullets"
 
@@ -28,8 +30,7 @@ func _input(event):
 
 
 func _process(delta):
-	var mouse_pos = get_viewport().get_mouse_position()
-	gun_anchor.look_at(mouse_pos)
+	gun_anchor.look_at(get_global_mouse_position())
 	if cos(gun_anchor.rotation) < 0:
 		gun.flip_v = true
 	else:
@@ -59,3 +60,4 @@ func fire_bullet(position, direction):
 	bullet_container.add_child(new_bullet)
 	new_bullet.position = position
 	new_bullet.direction = direction
+	camera.shake(10, 0.1)
