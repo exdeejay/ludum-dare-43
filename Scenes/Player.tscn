@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/placeholder32.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/placeholderRifle32.png" type="Texture" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+
+custom_solver_bias = 0.0
+radius = 16.0
+
+[node name="Player" type="KinematicBody2D"]
+
+position = Vector2( -0.902466, 0 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+speed = 50
+top_speed = 500
+jump_speed = 500
+gravity = 980
+
+[node name="Sprite" type="Sprite" parent="." index="0"]
+
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform", "Z Index" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
+
+shape = SubResource( 1 )
+
+[node name="GunAnchor" type="Position2D" parent="." index="2"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="Gun" type="Sprite" parent="GunAnchor" index="0"]
+
+position = Vector2( 8, 0 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 3 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="BulletSpawn" type="Position2D" parent="GunAnchor/Gun" index="0"]
+
+position = Vector2( 16, 0 )
+_sections_unfolded = [ "Transform" ]
+
+
