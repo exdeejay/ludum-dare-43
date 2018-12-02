@@ -9,7 +9,7 @@
 custom_solver_bias = 0.0
 radius = 16.0
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" index="0"]
 
 position = Vector2( -0.902466, 0 )
 input_pickable = false
@@ -21,6 +21,9 @@ speed = 50
 top_speed = 500
 jump_speed = 500
 gravity = 980
+top_fall_speed = 1960
+energy = 12
+o2 = 30
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 

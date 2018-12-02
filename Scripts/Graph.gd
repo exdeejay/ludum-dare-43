@@ -4,7 +4,7 @@ class GraphTile:
 	var neighbors
 
 export var runspeed = 250
-export var jumpspeed = 560
+export var jumpspeed = 790
 export var gravity = 980
 
 var tiles = []
@@ -37,9 +37,10 @@ func _init(tiles_x, tiles_y, size, env):
 func neighbors(tile):
 	var neighbors = []
 	for t in tiles:
+		if t == self:
+			continue
 		var dx = abs(t.position.x * 32 - tile.position.x * 32)
-		var dy = t.position.y * 32 - tile.position.y * 32
-		if dy >= 0.5*gravity*(dx/runspeed) - jumpspeed*(dx/runspeed):
+		if t.position.y * 32 >= 0.5 * gravity * pow(dx/runspeed, 2) - jumpspeed*(dx/runspeed) + tile.position.y * 32:
 			neighbors.append(t)
 	return neighbors
 

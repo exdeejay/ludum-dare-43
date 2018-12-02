@@ -1,28 +1,117 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://Scripts/Environment.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/Main.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/placeholder64blk.png" type="Texture" id=2]
-[ext_resource path="res://Scenes/Alien.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Scripts/Camera2D.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Environment.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Aliens.gd" type="Script" id=4]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Scripts/Camera2D.gd" type="Script" id=6]
+[ext_resource path="res://Scenes/GUI.tscn" type="PackedScene" id=7]
 
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
-extents = Vector2( 384, 16 )
+extents = Vector2( 640, 16 )
 
 [sub_resource type="RectangleShape2D" id=2]
 
 custom_solver_bias = 0.0
+extents = Vector2( 16, 384 )
+
+[sub_resource type="RectangleShape2D" id=3]
+
+custom_solver_bias = 0.0
 extents = Vector2( 160, 16 )
 
-[node name="Main" type="Node2D" index="0"]
-
-_sections_unfolded = [ "Pause" ]
-
-[node name="Environment" type="Node2D" parent="." index="0"]
+[node name="Main" type="Node2D"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
+
+[node name="Floor5" type="StaticBody2D" parent="." index="0"]
+
+editor/display_folded = true
+position = Vector2( 0, -480 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Transform" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Floor5" index="0"]
+
+scale = Vector2( 20, 0.5 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor5" index="1"]
+
+shape = SubResource( 1 )
+
+[node name="Wall" type="StaticBody2D" parent="." index="1"]
+
+editor/display_folded = true
+position = Vector2( 640, -96 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Transform" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Wall" index="0"]
+
+scale = Vector2( 0.5, 12 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall" index="1"]
+
+shape = SubResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Wall2" type="StaticBody2D" parent="." index="2"]
+
+editor/display_folded = true
+position = Vector2( -640, -96 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Transform" ]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Wall2" index="0"]
+
+scale = Vector2( 0.5, 12 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2" index="1"]
+
+shape = SubResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Environment" type="Node2D" parent="." index="3"]
+
+editor/display_folded = true
+script = ExtResource( 3 )
 
 [node name="Floor" type="StaticBody2D" parent="Environment" index="0"]
 
@@ -42,7 +131,7 @@ __meta__ = {
 
 [node name="Sprite" type="Sprite" parent="Environment/Floor" index="0"]
 
-scale = Vector2( 12, 0.5 )
+scale = Vector2( 20, 0.5 )
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
@@ -53,7 +142,7 @@ shape = SubResource( 1 )
 [node name="Floor2" type="StaticBody2D" parent="Environment" index="1"]
 
 editor/display_folded = true
-position = Vector2( 384, 192 )
+position = Vector2( 416, 32 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -74,12 +163,12 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Floor2" index="1"]
 
-shape = SubResource( 2 )
+shape = SubResource( 3 )
+one_way_collision = true
 
 [node name="Floor3" type="StaticBody2D" parent="Environment" index="2"]
 
-editor/display_folded = true
-position = Vector2( -416, 192 )
+position = Vector2( -384, 32 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -100,28 +189,64 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Floor3" index="1"]
 
-shape = SubResource( 2 )
+shape = SubResource( 3 )
+one_way_collision = true
 
-[node name="Alien" parent="." index="1" instance=ExtResource( 3 )]
+[node name="Floor4" type="StaticBody2D" parent="Environment" index="3"]
 
-position = Vector2( 352, 128 )
+position = Vector2( 0, -224 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
 _sections_unfolded = [ "Transform" ]
-path_cache_duration = 0.1
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="Player" parent="." index="2" instance=ExtResource( 4 )]
+[node name="Sprite" type="Sprite" parent="Environment/Floor4" index="0"]
+
+scale = Vector2( 5, 0.5 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Floor4" index="1"]
+
+shape = SubResource( 3 )
+one_way_collision = true
+
+[node name="Spawn1" type="Position2D" parent="." index="4"]
+
+position = Vector2( -576, 160 )
+
+[node name="Spawn2" type="Position2D" parent="." index="5"]
+
+position = Vector2( 576, 160 )
+
+[node name="Aliens" type="Node2D" parent="." index="6"]
+
+script = ExtResource( 4 )
+
+[node name="Ammos" type="Node2D" parent="." index="7"]
+
+[node name="Player" parent="." index="8" instance=ExtResource( 5 )]
 
 _sections_unfolded = [ "Transform" ]
-jump_speed = 560
-top_fall_speed = 1960
+jump_speed = 790
+energy = 12
+o2 = 30
 
-[node name="Bullets" type="Node2D" parent="." index="3"]
+[node name="Bullets" type="Node2D" parent="." index="9"]
 
-[node name="Camera2D" type="Camera2D" parent="." index="4"]
+[node name="Camera2D" type="Camera2D" parent="." index="10"]
 
 anchor_mode = 1
 rotating = false
 current = true
-zoom = Vector2( 1, 1 )
+zoom = Vector2( 2, 2 )
 limit_left = -10000000
 limit_top = -10000000
 limit_right = 10000000
@@ -140,6 +265,16 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
-script = ExtResource( 5 )
+script = ExtResource( 6 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." index="11"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+
+[node name="GUI" parent="CanvasLayer" index="0" instance=ExtResource( 7 )]
 
 

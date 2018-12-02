@@ -17,12 +17,13 @@ collision/safe_margin = 0.08
 script = ExtResource( 1 )
 speed = 50
 top_speed = 250
-jump_speed = 560
+jump_speed = 790
 gravity = 980
 top_fall_speed = 1960
-path_cache_duration = 1
+path_cache_duration = 0.1
 tile_threshold_x = 32
 tile_threshold_y = 32
+tile_time_threshold = 3
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 

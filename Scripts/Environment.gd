@@ -14,11 +14,15 @@ var path
 #		node.position = t.position * 32
 
 
-func _process(delta):
-	update()
+#func _process(delta):
+#	update()
 
 
 #func _draw():
+#	for t in graph.tiles:
+#		for n in t.neighbors:
+#			if n.position.x == t.position.x:
+#				draw_line(t.position * 32, n.position * 32, ColorN("black"))
 #	if path:
 #		for i in range(path.size()):
 #			if i != path.size() - 1:
