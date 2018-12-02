@@ -1,0 +1,146 @@
+extends KinematicBody2D
+
+const PriorityQueue = preload("res://Scripts/PriorityQueue.gd")
+
+export var speed = 50
+export var top_speed = 250
+
+export var jump_speed = 560
+export var gravity = 980
+export var top_fall_speed = 1960
+
+export var path_cache_duration = 0.1
+
+export var tile_threshold_x = 32
+export var tile_threshold_y = 32
+
+var move_left = false
+var move_right = false
+var jump = false
+var velocity = Vector2()
+var path
+var path_cache_time = 0
+var current_tile
+
+onready var player = $"/root/Main/Player"
+onready var environment = $"/root/Main/Environment"
+onready var graph = environment.graph
+onready var platforms = environment.get_children()
+
+
+func _ready():
+	pass
+
+
+func _process(delta):
+	current_tile = get_tile(self)
+	path_cache_time -= delta
+	if path_cache_time <= 0:
+		if path:
+			path = a_star_search(environment.graph, path[0], get_tile(player))
+		else:
+			path = a_star_search(environment.graph, current_tile, get_tile(player))
+		environment.path = path
+		path_cache_time = path_cache_duration
+	if path.size() > 0:
+		follow_path()
+
+
+func _physics_process(delta):
+	velocity.y += gravity * delta
+	if jump and is_on_floor():
+		velocity.y = -jump_speed
+	
+	if move_right:
+		velocity.x += speed
+	if move_left:
+		velocity.x -= speed
+	if not move_right and not move_left:
+		velocity.x += -speed * sign(velocity.x)
+	
+	velocity.x = clamp(velocity.x, -top_speed, top_speed)
+	if velocity.y > top_fall_speed:
+		velocity.y = top_fall_speed
+	velocity = move_and_slide(velocity, Vector2(0, -1))
+
+
+func follow_path():
+	if current_tile == path[0]:
+		path.pop_front()
+	if path.size() > 0:
+		move_towards(path[0])
+	else:
+		move_right = false
+		move_left = false
+		jump = false
+
+
+func move_towards(tile):
+	if tile.position.x > current_tile.position.x:
+		move_right = true
+		move_left = false
+	else:
+		move_right = false
+		move_left = true
+	jump = tile.position.y < current_tile.position.y
+
+
+func get_tile(node):
+	var pos = node.position
+	var candidates = []
+	for t in graph.tiles:
+		if t.position.y * graph.tile_size + graph.tile_size >= pos.y:
+			if t.position.x * graph.tile_size <= pos.x and pos.x <= t.position.x * graph.tile_size + graph.tile_size:
+				candidates.append(t)
+	if candidates.size() == 0:
+		var closest = graph.tiles[0]
+		var min_length = (closest.position - pos).length_squared()
+		for t in graph.tiles:
+			var length = (t.position - pos).length_squared()
+			if length < min_length:
+				min_length = length
+				closest = t
+		return closest
+	else:
+		var closest = candidates[0]
+		for c in candidates:
+			if c.position.y - pos.y < closest.position.y - pos.y:
+				closest = c
+		return closest
+
+
+func a_star_search(graph, start, goal):
+	if not start or not goal:
+		return []
+	var frontier = PriorityQueue.new()
+	frontier.append(start, 0)
+	var came_from = {}
+	var cost_so_far = {}
+	came_from[start] = null
+	cost_so_far[start] = 0
+    
+	while frontier.size() > 0:
+		var current = frontier.pop_front()
+        
+		if current == goal:
+			break
+        
+		for next in graph.neighbors(current):
+			var new_cost = cost_so_far[current] + graph.cost(next)
+			if not cost_so_far.keys().has(next) or new_cost < cost_so_far[next]:
+				cost_so_far[next] = new_cost
+				var priority = new_cost + heuristic(goal, next)
+				frontier.append(next, priority)
+				came_from[next] = current
+	var path = [goal]
+	var current = goal
+	while current != start:
+		path.append(came_from[current])
+		current = came_from[current]
+	path.append(start)
+	path.invert()
+	return path
+
+
+func heuristic(a, b):
+	return abs(a.position.x - b.position.x) + abs(a.position.y - b.position.y)

@@ -2,11 +2,11 @@ extends KinematicBody2D
 
 export var speed = 50
 export var top_speed = 500
-export var jump_speed = 500
+export var jump_speed = 560
 export var gravity = 980
+export var top_fall_speed = 1960
 
 var velocity = Vector2()
-var acceleration = Vector2()
 
 const bullet = preload("res://Scenes/Bullet.tscn")
 
@@ -52,6 +52,8 @@ func _physics_process(delta):
 		velocity.x += -speed * sign(velocity.x)
 	
 	velocity.x = clamp(velocity.x, -top_speed, top_speed)
+	if velocity.y > top_fall_speed:
+		velocity.y = top_fall_speed
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 
