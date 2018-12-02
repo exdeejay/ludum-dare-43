@@ -23,7 +23,7 @@ extents = Vector2( 16, 384 )
 custom_solver_bias = 0.0
 extents = Vector2( 160, 16 )
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause" ]
@@ -236,8 +236,6 @@ script = ExtResource( 4 )
 
 _sections_unfolded = [ "Transform" ]
 jump_speed = 790
-energy = 12
-o2 = 30
 
 [node name="Bullets" type="Node2D" parent="." index="9"]
 
