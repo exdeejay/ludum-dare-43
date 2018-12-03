@@ -2,8 +2,8 @@ extends Area2D
 
 const Alien = preload("res://Scripts/Alien.gd")
 
-export var speed = 20
-export var threshold = 20 * 32
+const speed = 30
+const threshold = 1000 * 64
 var direction = Vector2()
 
 func _ready():

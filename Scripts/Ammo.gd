@@ -17,5 +17,6 @@ func _ready():
 
 func _on_Ammo_body_entered(body):
 	if body == player:
+		player.get_node("Pickup").play()
 		player.energy += amount_worth
 		queue_free()

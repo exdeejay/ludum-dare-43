@@ -6,6 +6,8 @@
 
 modulate = Color( 1, 1, 1, 0.375686 )
 texture = ExtResource( 1 )
-_sections_unfolded = [ "Visibility" ]
+region_enabled = true
+region_rect = Rect2( 0, 0, 64, 64 )
+_sections_unfolded = [ "Region", "Visibility" ]
 
 

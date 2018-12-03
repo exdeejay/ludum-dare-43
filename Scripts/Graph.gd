@@ -11,24 +11,22 @@ var tiles = []
 var num_tiles_x
 var num_tiles_y
 var tile_size
-var environment
+var tilemap
 
-func _init(tiles_x, tiles_y, size, env):
+func _init(tiles_x, tiles_y, size, map):
 	num_tiles_x = tiles_x
 	num_tiles_y = tiles_y
 	tile_size = size
-	environment = env
+	tilemap = map
 	for x in range(-num_tiles_x, num_tiles_x):
 		for y in range(-num_tiles_y, num_tiles_y):
-			var x_coord = x * tile_size
-			var y_coord = y * tile_size
-			for node in environment.get_children():
-				var extents = node.get_child(1).shape.extents
-				if node.position.x - extents.x < x_coord and x_coord < node.position.x + extents.x:
-					if node.position.y - extents.y < y_coord and y_coord < node.position.y + extents.y:
-						var new_tile = GraphTile.new()
-						new_tile.position = Vector2(x, y - 1)
-						tiles.append(new_tile)
+			var tile_pos = tilemap.world_to_map(Vector2(x * tile_size, y * tile_size))
+			var cell = tilemap.get_cell(tile_pos.x, tile_pos.y)
+			var cell_above = tilemap.get_cell(tile_pos.x, tile_pos.y - 1)
+			if cell != -1 and cell_above == -1:
+				var new_tile = GraphTile.new()
+				new_tile.position = Vector2(x, y - 1)
+				tiles.append(new_tile)
 	for t in tiles:
 		t.cost = cost(t)
 		t.neighbors = neighbors(t)
@@ -39,8 +37,8 @@ func neighbors(tile):
 	for t in tiles:
 		if t == self:
 			continue
-		var dx = abs(t.position.x * 32 - tile.position.x * 32)
-		if t.position.y * 32 >= 0.5 * gravity * pow(dx/runspeed, 2) - jumpspeed*(dx/runspeed) + tile.position.y * 32:
+		var dx = abs(t.position.x * tile_size - tile.position.x * tile_size)
+		if t.position.y * tile_size >= 0.5 * gravity * pow(dx/runspeed, 2) - jumpspeed*(dx/runspeed) + tile.position.y * tile_size:
 			neighbors.append(t)
 	return neighbors
 
@@ -48,9 +46,8 @@ func neighbors(tile):
 func cost(end):
 	var x = end.position.x * tile_size
 	var y = end.position.y * tile_size
-	for node in environment.get_children():
-		var extents = node.get_child(1).shape.extents
-		if node.position.x - extents.x < x and x < node.position.x + extents.x:
-			if node.position.x - extents.x < x and x < node.position.x + extents.x:
-				return 0
+	var tile_pos = tilemap.world_to_map(Vector2(x, y))
+	var cell = tilemap.get_cell(tile_pos.x, tile_pos.y)
+	if cell != -1:
+		return 0
 	return 1

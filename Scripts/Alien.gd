@@ -12,8 +12,8 @@ export var top_fall_speed = 1960
 
 export var path_cache_duration = 0.1
 
-export var tile_threshold_x = 32
-export var tile_threshold_y = 32
+export var tile_threshold_x = 64
+export var tile_threshold_y = 64
 export var tile_time_threshold = 3
 
 var move_left = false
@@ -25,13 +25,16 @@ var path_cache_time = 0
 var current_tile
 var current_tile_time = 0
 
+onready var sprite = $Sprite
+const fps = 4
+var time_since_last_frame = 0
+
 onready var main = $"/root/Main"
 onready var player = $"/root/Main/Player"
-onready var environment = $"/root/Main/Environment"
 onready var aliens = $"/root/Main/Aliens"
 onready var ammos = $"/root/Main/Ammos"
-onready var graph = environment.graph
-onready var platforms = environment.get_children()
+
+onready var graph = aliens.graph
 
 
 func _ready():
@@ -44,13 +47,28 @@ func _process(delta):
 	path_cache_time -= delta
 	if path_cache_time <= 0:
 		if path and current_tile_time < tile_time_threshold:
-			path = a_star_search(environment.graph, path[0], get_tile(player))
+			path = a_star_search(aliens.graph, path[0], get_tile(player))
 		else:
-			path = a_star_search(environment.graph, current_tile, get_tile(player))
-		environment.path = path
+			path = a_star_search(aliens.graph, current_tile, get_tile(player))
 		path_cache_time = path_cache_duration
 	if path.size() > 0:
 		follow_path()
+	
+	if velocity.x < 0:
+		sprite.flip_h = true
+	elif velocity.x > 0:
+		sprite.flip_h = false
+	if not is_on_floor():
+		sprite.frame = 3
+		time_since_last_frame = 0
+	else:
+		time_since_last_frame += delta
+		if time_since_last_frame > 1.0 / fps:
+			time_since_last_frame = 0
+			if sprite.frame == 1:
+				sprite.frame = 0
+			else:
+				sprite.frame = 1
 
 
 func _physics_process(delta):

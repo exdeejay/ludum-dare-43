@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/placeholderAmmo16.png-c320b08a7807eb5a9140f3e4a84ecdeb.stex"
+path="res://.import/bullet.png-6b56c7898a9b46a3c3db58585f0f8e0d.stex"
 
 [deps]
 
-source_file="res://Sprites/placeholderAmmo16.png"
-dest_files=[ "res://.import/placeholderAmmo16.png-c320b08a7807eb5a9140f3e4a84ecdeb.stex" ]
+source_file="res://Sprites/bullet.png"
+dest_files=[ "res://.import/bullet.png-6b56c7898a9b46a3c3db58585f0f8e0d.stex" ]
 
 [params]
 
@@ -16,7 +16,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

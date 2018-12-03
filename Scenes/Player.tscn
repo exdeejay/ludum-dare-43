@@ -1,13 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://Sprites/placeholder32.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/placeholderRifle32.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/player.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/rifle.png" type="Texture" id=3]
+[ext_resource path="res://Sounds/shoot.wav" type="AudioStream" id=4]
+[ext_resource path="res://Sounds/no_ammo.wav" type="AudioStream" id=5]
+[ext_resource path="res://Sounds/warning.wav" type="AudioStream" id=6]
+[ext_resource path="res://Sounds/refuel2.wav" type="AudioStream" id=7]
+[ext_resource path="res://Sounds/pickup.wav" type="AudioStream" id=8]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
-radius = 16.0
+extents = Vector2( 24, 64 )
 
 [node name="Player" type="KinematicBody2D" index="0"]
 
@@ -22,13 +27,15 @@ top_speed = 500
 jump_speed = 500
 gravity = 980
 top_fall_speed = 1960
-energy = 12
+fps = 8
+energy = 30
 o2 = 30
 
 [node name="Sprite" type="Sprite" parent="." index="0"]
 
 texture = ExtResource( 2 )
-_sections_unfolded = [ "Transform", "Z Index" ]
+hframes = 4
+_sections_unfolded = [ "Animation" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
 
@@ -40,7 +47,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Gun" type="Sprite" parent="GunAnchor" index="0"]
 
-position = Vector2( 8, 0 )
+position = Vector2( 25.1649, -7.04202 )
 scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 3 )
 _sections_unfolded = [ "Transform" ]
@@ -49,5 +56,60 @@ _sections_unfolded = [ "Transform" ]
 
 position = Vector2( 16, 0 )
 _sections_unfolded = [ "Transform" ]
+
+[node name="Shoot" type="AudioStreamPlayer2D" parent="GunAnchor" index="1"]
+
+stream = ExtResource( 4 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="NoAmmo" type="AudioStreamPlayer2D" parent="GunAnchor" index="2"]
+
+stream = ExtResource( 5 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="Warning" type="AudioStreamPlayer2D" parent="." index="3"]
+
+stream = ExtResource( 6 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="Refuel" type="AudioStreamPlayer2D" parent="." index="4"]
+
+stream = ExtResource( 7 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
+
+[node name="Pickup" type="AudioStreamPlayer2D" parent="." index="5"]
+
+stream = ExtResource( 8 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
 
 
