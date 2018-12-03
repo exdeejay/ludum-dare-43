@@ -14,7 +14,7 @@ func _ready():
 func _process(delta):
 	spawnTimer -= delta
 	if spawnTimer <= 0:
-		spawn()
+		#spawn()
 		spawnTimer = spawnDelay
 
 
