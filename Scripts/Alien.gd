@@ -110,10 +110,11 @@ func move_towards(tile):
 		move_left = true
 	jump = tile.position.y < current_tile.position.y
 	for i in range(get_slide_count()):
-		if get_slide_collision(i).get_collider().get_parent() == aliens:
-			jump = true
-		if get_slide_collision(i).get_collider() == player:
-			main.game_over()
+		if get_slide_collision(i):
+			if get_slide_collision(i).get_collider().get_parent() == aliens:
+				jump = true
+			if get_slide_collision(i).get_collider() == player:
+				main.game_over()
 
 
 func get_tile(node):
@@ -178,6 +179,7 @@ func heuristic(a, b):
 
 
 func on_kill():
+	player.get_node("Hit").play()
 	var chance = randi() % 2
 	if chance == 1:
 		var new = Ammo.instance()

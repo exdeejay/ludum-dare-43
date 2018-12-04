@@ -15,5 +15,7 @@ func _process(delta):
 			last_second = seconds
 			player.get_node("Warning").play()
 		o2_val.set("custom_colors/font_color", ColorN("red") if seconds % 2 == 0 else ColorN("white"))
+	else:
+		o2_val.set("custom_colors/font_color", ColorN("white"))
 	
 	energy_val.text = str(player.energy)
