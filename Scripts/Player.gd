@@ -14,6 +14,7 @@ export var energy = 30
 export var o2 = 30
 
 const bullet = preload("res://Scenes/Bullet.tscn")
+const lamp = preload("res://Sprites/lamp.png")
 
 onready var sprite = $Sprite
 onready var main = $"/root/Main"
@@ -92,8 +93,8 @@ func _physics_process(delta):
 	velocity.x = clamp(velocity.x, -top_speed, top_speed)
 	if velocity.y > top_fall_speed:
 		velocity.y = top_fall_speed
+
 	velocity = move_and_slide(velocity, Vector2(0, -1))
-	
 
 
 func fire_bullet(position, direction):
@@ -105,5 +106,10 @@ func fire_bullet(position, direction):
 	var new_bullet = bullet.instance()
 	bullet_container.add_child(new_bullet)
 	new_bullet.position = position
+	new_bullet.rotation = direction.angle()
 	new_bullet.direction = direction
 	camera.shake(10, 0.1)
+
+
+func switch_to_lamp():
+	gun.texture = lamp
